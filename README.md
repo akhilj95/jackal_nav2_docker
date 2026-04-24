@@ -1,4 +1,4 @@
-# Jackal Nav2 Docker Workspace 🐢🚀
+# Jackal Nav2 Docker Workspace 🐢
 
 A fully containerized **ROS 2 Humble** development environment tailored for the Clearpath Jackal UGV. This workspace simplifies the process of building and running Navigation2 from source while maintaining a clean host environment.
 
@@ -17,6 +17,7 @@ A fully containerized **ROS 2 Humble** development environment tailored for the 
 Ensure you have the following installed on your host machine:
 * [Docker](https://docs.docker.com/get-docker/) & [Docker Compose V2](https://docs.docker.com/compose/install/)
 * [Git](https://git-scm.com/)
+* [ROS Noetic](https://wiki.ros.org/noetic/Installation) and [ROS Foxy](https://docs.ros.org/en/foxy/Installation.html) (for bridging ros1 messages from jackal to ros2 humble)
 * [Foxglove Studio](https://foxglove.dev/download) (for visualization)
 
 ---
@@ -26,7 +27,7 @@ Ensure you have the following installed on your host machine:
 ### 1. Clone the Repository
 Since Navigation2 is a submodule, you **must** clone recursively:
 ```bash
-git clone --recursive [https://github.com/akhilj95/jackal_nav2_docker.git](https://github.com/akhilj95/jackal_nav2_docker.git)
+git clone --recursive https://github.com/akhilj95/jackal_nav2_docker.git
 cd jackal_nav2_docker
 ```
 
@@ -62,13 +63,53 @@ Inside the container, a custom alias `cb` is provided for standard builds:
 cb
 ```
 
-### Running Navigation
+## 🛠 Utility Scripts
+
+Convenience scripts are provided in the `scripts/` directory to simplify container interaction and bridge management.
+
+| Script | Description |
+| :--- | :--- |
+| `./scripts/terminal.sh` | Opens a new interactive bash session inside the running container. |
+| `./scripts/start_bridge.sh` | Launches the `ros1_bridge` using the parameters defined in `config/bridge_topics.yaml`. |
+
+> **Note:** Ensure scripts are executable before first use: `chmod +x scripts/*.sh`
+
+---
+
+## 🌉 ROS 1 Bridge Configuration
+
+Because the Jackal hardware typically runs **ROS 1 Noetic**, this workspace uses a `ros1_bridge` to communicate with **ROS 2 Humble**.
+
+### Topic Mapping (`config/bridge_topics.yaml`)
+
+The bridge uses a declarative YAML format to map topics between versions. To add a new topic to the bridge, edit this file following this structure:
+
+```yaml
+# Example entry in config/bridge_topics.yaml
+- topic_name: "/cmd_vel"
+  type: "geometry_msgs/msg/Twist"
+  queue_size: 10
+```
+
+### Running the Bridge
+
+The bridge requires a workspace where both ROS 1(noetic) and ROS 2(foxy) are sourced. The `./scripts/start_bridge.sh` script sources the ros versions and starts the `parameter_bridge`.
+
+```bash
+# Start the bridge from the host
+./scripts/start_bridge.sh
+```
+---
+
+## 🧭 Running Navigation
 To launch the Jackal-specific navigation stack:
 ```bash
 ros2 launch jackal_nav2_bringup bringup.launch.py
 ```
 
-### Visualization (Foxglove)
+---
+
+## 👀 Visualization (Foxglove)
 Since the container is headless, use Foxglove Studio on your host machine. Inside the container, start the bridge:
 ```bash
 ros2 run foxglove_bridge foxglove_bridge
