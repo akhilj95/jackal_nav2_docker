@@ -1,0 +1,39 @@
+services:
+  nav2_workspace:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      args:
+        # If USER_NAME isn't in .env, it defaults to 'ros2user'
+        USERNAME: ${USER_NAME:-ros2user}
+        USER_UID: ${USER_UID:-1000}
+        USER_GID: ${USER_GID:-1000}
+    image: jackal-nav2-humble:latest
+    container_name: jackal_unified_ws
+    network_mode: host
+    ipc: host
+    privileged: true # Helps with hardware/graphics access
+    stdin_open: true
+    tty: true
+    user: "${USER_UID:-1000}:${USER_GID:-1000}"
+
+    working_dir: /home/${USER_NAME:-ros2user}/ros2_ws
+
+    environment:
+      - ROS_DOMAIN_ID=${ROS_DOMAIN_ID:-0}
+      - RMW_IMPLEMENTATION=${RMW_IMPLEMENTATION:-rmw_cyclonedds_cpp}
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+
+    volumes:
+      # Persistent build cache so you don't lose 'install' on restart
+      - nav2_build_cache:/home/${USER_NAME:-ros2user}/ros2_ws
+      # The "Live" source code
+      - ./src:/home/${USER_NAME:-ros2user}/ros2_ws/src
+      # Bags and GUI auth
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ~/.Xauthority:/home/${USER_NAME:-ros2user}/.Xauthority:rw
+      - /home/isr/rosbag1_2204:/home/${USER_NAME:-ros2user}/bags
+
+volumes:
+  nav2_build_cache:

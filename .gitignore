@@ -1,0 +1,25 @@
+# --- ROS 2 build artifacts ---
+build/
+install/
+log/
+
+# --- Bag Files (Crucial!) ---
+# Bags can be gigabytes; never upload them to Git.
+*.mcap
+*.db3
+bags/
+
+# --- IDEs & Editors ---
+.vscode/
+
+# --- Docker & Environment ---
+.env
+.DS_Store
+
+# --- Python ---
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# --- C++ Indexing ---
+.ccls-cache/
