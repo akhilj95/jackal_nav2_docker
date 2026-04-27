@@ -12,12 +12,21 @@ def generate_launch_description():
     return LaunchDescription([
         DeclareLaunchArgument('use_sim_time', default_value='true'),
 
-        # 1. Custom Ouster Lidar
+        # 1. Custom Ouster Lidar (Updated with IMU calibration)
         Node(
             package='tf2_ros',
             executable='static_transform_publisher',
             name='tf_base_to_os',
-            arguments=['0', '0', '0.75', '0', '0', '0', 'base_link', 'os_sensor'],
+            arguments=[
+                '--x', '0.0', 
+                '--y', '0.0', 
+                '--z', '0.75',
+                '--roll', '0.01557', 
+                '--pitch', '-0.04089', 
+                '--yaw', '0.0',
+                '--frame-id', 'base_link', 
+                '--child-frame-id', 'os_sensor'
+            ],
             parameters=[static_tf_params]
         ),
 

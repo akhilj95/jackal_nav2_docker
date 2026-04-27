@@ -1,0 +1,41 @@
+services:
+  nav2_workspace:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      args:
+        USERNAME: ${USER:-ros2user}
+        USER_UID: ${UID:-1000} 
+        USER_GID: ${GID:-1000}
+    image: jackal-nav2-humble:latest
+    container_name: jackal_unified_ws
+    network_mode: host
+    ipc: host
+    pid: host
+    stdin_open: true
+    tty: true
+    user: "${UID:-1000}:${GID:-1000}"
+    
+    working_dir: /home/${USER:-ros2user}/ros2_ws
+
+    environment:
+      - ROS_DOMAIN_ID=7
+      - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+
+    volumes:
+      - nav2_build_cache:/home/${USER:-ros2user}/ros2_ws
+      - ./src:/home/${USER:-ros2user}/ros2_ws/src
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ~/.Xauthority:/home/${USER:-ros2user}/.Xauthority:rw
+      - /home/isr/rosbag1_2204:/home/${USER:-ros2user}/bags
+      # Mount the whole config folder
+      - ./config:/home/${USER:-ros2user}/ros2_ws/config
+      # Mount the maps folder
+      - ./maps:/home/${USER:-ros2user}/ros2_ws/maps
+      # Mount the rviz folder
+      - ./rviz:/home/${USER:-ros2user}/ros2_ws/rviz
+
+volumes:
+  nav2_build_cache:

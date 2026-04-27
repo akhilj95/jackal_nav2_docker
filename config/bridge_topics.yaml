@@ -14,3 +14,6 @@ topics:
   - topic: /clock
     type: rosgraph_msgs/msg/Clock
     queue_size: 10
+  - topic: /ouster/points
+    type: sensor_msgs/msg/PointCloud2
+    queue_size: 10

@@ -1,0 +1,3 @@
+Run this to get the corrected orientation of the ouster
+
+rosrun imu_filter_madgwick imu_filter_node   _use_mag:=false   _publish_tf:=false   _world_frame:="enu"   imu/data_raw:=/ouster/imu   imu/data:=/ouster/imu/filtered
