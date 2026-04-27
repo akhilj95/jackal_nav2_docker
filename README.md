@@ -36,8 +36,8 @@ Create a `.env` file in the root directory to manage permissions and ROS setting
 ```bash
 # Example .env content
 USER_NAME=ros2user
-USER_UID=$(id -u)
-USER_GID=$(id -g)
+USER_UID=1000
+USER_GID=1000
 ROS_DOMAIN_ID=7
 RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 ```
