@@ -33,7 +33,7 @@ services:
       # Bags and GUI auth
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - ~/.Xauthority:/home/${USER_NAME:-ros2user}/.Xauthority:rw
-      - /home/isr/rosbag1_2204:/home/${USER_NAME:-ros2user}/bags
+      - /home/akhil/pharmarobot_files/rosbag1_2204:/home/${USER_NAME:-ros2user}/bags
 
 volumes:
   nav2_build_cache:
