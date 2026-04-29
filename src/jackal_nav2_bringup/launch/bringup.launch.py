@@ -27,7 +27,7 @@ def generate_launch_description():
         ),
         DeclareLaunchArgument(
             'map_name',
-            default_value='floor0_map.yaml',
+            default_value='my_new_map1.yaml',
             description='Name of the map file in the maps folder'
         ),
         DeclareLaunchArgument('lidar_z',     default_value='0.83'),

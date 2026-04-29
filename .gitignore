@@ -7,7 +7,13 @@ log/
 # Bags can be gigabytes; never upload them to Git.
 *.mcap
 *.db3
+.empty_bags/
 bags/
+
+# --- Maps (Sensitive) ---
+src/jackal_nav2_bringup/maps/
+.empty_maps/
+maps/
 
 # --- IDEs & Editors ---
 .vscode/
@@ -23,3 +29,7 @@ __pycache__/
 
 # --- C++ Indexing ---
 .ccls-cache/
+
+# Allow one of the maps for test.
+!src/jackal_nav2_bringup/maps/my_new_map1.yaml
+!src/jackal_nav2_bringup/maps/my_new_map1.pgm
