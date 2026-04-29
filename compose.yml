@@ -9,7 +9,7 @@ services:
         USER_UID: ${USER_UID:-1000}
         USER_GID: ${USER_GID:-1000}
     image: jackal-nav2-humble:latest
-    container_name: jackal_unified_ws
+    container_name: ${CONTAINER_NAME:-jackal_nav2_container}
     network_mode: host
     ipc: host
     privileged: true # Helps with hardware/graphics access
@@ -26,14 +26,23 @@ services:
       - QT_X11_NO_MITSHM=1
 
     volumes:
-      # Persistent build cache so you don't lose 'install' on restart
+      # Persistent build cache so you don't lose compilation on restart
       - nav2_build_cache:/home/${USER_NAME:-ros2user}/ros2_ws
+
       # The "Live" source code
       - ./src:/home/${USER_NAME:-ros2user}/ros2_ws/src
+      
+      # Time Synchronization
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      
       # Bags and GUI auth
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - ~/.Xauthority:/home/${USER_NAME:-ros2user}/.Xauthority:rw
-      - /home/akhil/pharmarobot_files/rosbag1_2204:/home/${USER_NAME:-ros2user}/bags
+      
+      # Custom User Data Hooks
+      - ${CUSTOM_BAG_DIR:-./.empty_bags}:/home/${USER_NAME:-ros2user}/bags
+      - ${CUSTOM_MAP_DIR:-./.empty_maps}:/home/${USER_NAME:-ros2user}/maps
 
 volumes:
   nav2_build_cache:

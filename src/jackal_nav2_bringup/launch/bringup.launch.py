@@ -30,9 +30,9 @@ def generate_launch_description():
             default_value='floor0_map.yaml',
             description='Name of the map file in the maps folder'
         ),
-        DeclareLaunchArgument('lidar_z',     default_value='0.75'),
-        DeclareLaunchArgument('lidar_roll',  default_value='0.01557'), 
-        DeclareLaunchArgument('lidar_pitch', default_value='-0.04089'),
+        DeclareLaunchArgument('lidar_z',     default_value='0.83'),
+        DeclareLaunchArgument('lidar_roll',  default_value='0.0'), 
+        DeclareLaunchArgument('lidar_pitch', default_value='0.0'),
         DeclareLaunchArgument('lidar_yaw',   default_value='0.0'),
 
         # 2. Include TF Skeleton (Passing all lidar calibrations)

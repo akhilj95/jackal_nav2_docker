@@ -16,8 +16,12 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # 2. Safely create the user with the ID passed from Compose
-RUN if ! getent group $USER_GID > /dev/null 2>&1; then groupadd --gid $USER_GID $USERNAME; fi && \
+# FIRST: Delete the default 'ubuntu' user if it exists to free up UID 1000
+RUN if getent passwd ubuntu > /dev/null 2>&1; then userdel -r ubuntu; fi && \
+    # THEN: Create the intended group and user
+    if ! getent group $USER_GID > /dev/null 2>&1; then groupadd --gid $USER_GID $USERNAME; fi && \
     if ! getent passwd $USER_UID > /dev/null 2>&1; then useradd --uid $USER_UID --gid $USER_GID -m -s /bin/bash $USERNAME; fi && \
+    # Grant sudo privileges
     echo "$USERNAME ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME && \
     chmod 0440 /etc/sudoers.d/$USERNAME
 
